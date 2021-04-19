@@ -9,3 +9,4 @@ from . import BaseModel
 class CommitFeatures(BaseModel):
     commit: Commit
     references_vuln_id: bool = False
+    changes_relevant_path: bool = False

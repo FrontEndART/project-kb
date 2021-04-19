@@ -48,6 +48,7 @@ def preprocess_commit(git_commit: gitCommit) -> Commit:
     result.hunks = git_commit.get_hunks()
     result.hunk_count = len(result.hunks)
     result.message = git_commit.get_msg()
+    result.changed_files = git_commit.get_changed_files()
 
     result.jira_refs = list(set(extract_jira_references(result.message)))
     result.ghissue_refs = extract_ghissue_references(result.message)
