@@ -10,10 +10,14 @@ def extract_features(commit: Commit, advisory_record: AdvisoryRecord) -> CommitF
     changes_relevant_path = extract_changes_relevant_path(
         advisory_record.paths, commit.changed_files
     )
+    time_between_commit_and_advisory_record = extract_time_between_commit_and_advisory_record(
+        commit.timestamp, advisory_record.published_timestamp
+    )
     commit_feature = CommitFeatures(
         commit=commit,
         references_vuln_id=references_vuln_id,
         changes_relevant_path=changes_relevant_path,
+        time_between_commit_and_advisory_record=time_between_commit_and_advisory_record,
     )
     return commit_feature
 
@@ -26,3 +30,9 @@ def extract_changes_relevant_path(
     relevant_paths: "list[str]", changed_paths: "list[str]"
 ) -> bool:
     return any([changed_path in relevant_paths for changed_path in changed_paths])
+
+
+def extract_time_between_commit_and_advisory_record(
+    commit_timestamp: int, advisory_record_timestamp: int
+) -> int:
+    return commit_timestamp - advisory_record_timestamp

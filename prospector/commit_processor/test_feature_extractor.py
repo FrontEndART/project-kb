@@ -8,6 +8,7 @@ from .feature_extractor import (
     extract_changes_relevant_path,
     extract_features,
     extract_references_vuln_id,
+    extract_time_between_commit_and_advisory_record,
 )
 from .preprocessor import preprocess_commit
 
@@ -29,12 +30,14 @@ def test_extract_features(repository):
         vulnerability_id="CVE-2020-26258",
         repository_url="https://github.com/apache/struts",
         paths=["pom.xml"],
+        published_timestamp=1607532756,
     )
 
     extracted_features = extract_features(processed_commit, advisory_record)
 
     assert extracted_features.references_vuln_id
     assert extracted_features.changes_relevant_path
+    assert extracted_features.time_between_commit_and_advisory_record == 1000000
 
 
 def test_extract_references_vuln_id():
@@ -65,3 +68,7 @@ def test_extract_changes_relevant_path():
     assert not extract_changes_relevant_path(
         relevant_paths=[path_1, path_2], changed_paths=[]
     )
+
+
+def test_time_between_commit_and_advisory_record():
+    assert extract_time_between_commit_and_advisory_record(142, 100) == 42

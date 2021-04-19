@@ -21,8 +21,8 @@ class AdvisoryRecord:
 
     vulnerability_id: str
     repository_url: str = ""
-    published_timestamp: int = ""
-    last_modified_timestamp: int = ""
+    published_timestamp: int = 0
+    last_modified_timestamp: int = 0
     references: "list[str]" = field(default_factory=list)
     references_content: "list[str]" = field(default_factory=list)
     advisory_references: "list[str]" = field(default_factory=list)
