@@ -6,6 +6,7 @@ from git.git import Git
 
 from .feature_extractor import (
     extract_changes_relevant_path,
+    extract_commit_time_distance_before,
     extract_features,
     extract_references_vuln_id,
     extract_time_between_commit_and_advisory_record,
@@ -72,3 +73,9 @@ def test_extract_changes_relevant_path():
     assert not extract_changes_relevant_path(
         relevant_paths=[path_1, path_2], changed_paths=[]
     )
+
+
+def test_extract_commit_time_distance_before():
+    assert extract_commit_time_distance_before(1359961896, 1359961897) == 1
+    assert extract_commit_time_distance_before(1359961896, 1359961896) is None
+    assert extract_commit_time_distance_before(1359961896, 1359961895) is None
