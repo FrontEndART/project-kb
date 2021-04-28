@@ -42,3 +42,12 @@ def extract_changes_relevant_path(
     of relevant paths (mentioned in the advisory record)
     """
     return any([changed_path in relevant_paths for changed_path in changed_paths])
+
+
+# Return the time distance if commit is after the timestamp or None
+def extract_commit_time_distance_after(
+    commit_timestamp: int, vulnerability_release: int
+) -> int:
+    if commit_timestamp > vulnerability_release:
+        return commit_timestamp - vulnerability_release
+    return None
