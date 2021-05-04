@@ -20,6 +20,7 @@ def extract_features(commit: Commit, advisory_record: AdvisoryRecord) -> CommitF
     references_ghissue = extract_references_ghissue(commit.ghissue_refs)
     n_changed_files = extract_n_changed_files(commit.changed_files)
     contains_jira_reference = extract_contains_jira_reference(commit.jira_refs)
+    vulnerability_timestamp = extract_vuln_timestamp(advisory_record)
     commit_feature = CommitFeatures(
         commit=commit,
         references_vuln_id=references_vuln_id,
@@ -30,6 +31,7 @@ def extract_features(commit: Commit, advisory_record: AdvisoryRecord) -> CommitF
         references_ghissue=references_ghissue,
         n_changed_files=n_changed_files,
         contains_jira_reference=contains_jira_reference,
+        vulnerability_timestamp=vulnerability_timestamp,
     )
     return commit_feature
 
@@ -52,6 +54,10 @@ def extract_changes_relevant_path(
     of relevant paths (mentioned in the advisory record)
     """
     return any([changed_path in relevant_paths for changed_path in changed_paths])
+
+
+def extract_vuln_timestamp(advisory_record: AdvisoryRecord) -> int:
+    return advisory_record.published_timestamp
 
 
 def extract_avg_hunk_size(hunks: "list[tuple[int]]") -> int:

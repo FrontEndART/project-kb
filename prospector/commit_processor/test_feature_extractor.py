@@ -14,6 +14,7 @@ from .feature_extractor import (
     extract_references_ghissue,
     extract_references_vuln_id,
     extract_time_between_commit_and_advisory_record,
+    extract_vuln_timestamp,
 )
 from .preprocessor import preprocess_commit
 
@@ -58,6 +59,18 @@ def test_extract_references_vuln_id():
 
 def test_time_between_commit_and_advisory_record():
     assert extract_time_between_commit_and_advisory_record(142, 100) == 42
+
+
+def test_extract_vuln_timestamp():
+
+    advisory_record = AdvisoryRecord(
+        vulnerability_id="TEST",
+        repository_url="https://github.com/apache/struts",
+        published_timestamp=100,
+        paths=["pom.xml"],
+    )
+
+    assert extract_vuln_timestamp(advisory_record) == 100
 
 
 def test_extract_changes_relevant_path():

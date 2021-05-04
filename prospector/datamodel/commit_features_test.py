@@ -18,6 +18,7 @@ def test_simple():
         references_ghissue=True,
         n_changed_files=44,
         contains_jira_reference=True,
+        vulnerability_timestamp=100,
     )
 
     assert commit_features.commit.repository == "https://github.com/abc/xyz"
@@ -29,3 +30,4 @@ def test_simple():
     assert commit_features.references_ghissue
     assert commit_features.n_changed_files == 44
     assert commit_features.contains_jira_reference
+    assert commit_features.vulnerability_timestamp == 100
