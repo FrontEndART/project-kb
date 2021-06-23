@@ -13,6 +13,7 @@ from .feature_extractor import (
     extract_references_vuln_id,
     extract_referred_to_by_nvd,
     extract_referred_to_by_pages_linked_from_advisories,
+    extract_relevant_path,
     extract_time_between_commit_and_advisory_record,
     is_commit_in_given_interval,
     is_commit_reachable_from_given_tag,
@@ -284,3 +285,28 @@ def test_extract_referred_to_by_pages_linked_from_advisories(repository, request
     assert not extract_referred_to_by_pages_linked_from_advisories(
         commit, advisory_record
     )
+
+
+def test_extract_relevant_path():
+    changed_file_1 = "org/maybe_not_buggy/buggy_file.py"
+    changed_file_2 = "org/core/bug_controller.py"
+    changed_file_3 = "org/maybe_not_buggy/totally_not_bugged.py"
+
+    cve_path_1 = "buggy_file.py"
+    cve_path_2 = "totally_not_bugged.py"
+    cve_path_3 = "org/core/bug_controller_test.py"
+
+    commit = Commit(
+        commit_id="test_commit",
+        repository="test_repository",
+        changed_files=[changed_file_1, changed_file_2, changed_file_3],
+    )
+    advisory_record = AdvisoryRecord(
+        vulnerability_id="test_advisory_record",
+        paths=[cve_path_1, cve_path_2, cve_path_3],
+    )
+
+    assert extract_relevant_path(commit, advisory_record) == [
+        ["org/maybe_not_buggy/buggy_file.py", "buggy_file.py"],
+        ["org/maybe_not_buggy/totally_not_bugged.py", "totally_not_bugged.py"],
+    ]

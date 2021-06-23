@@ -50,6 +50,9 @@ def extract_features(
         referred_to_by_nvd=referred_to_by_nvd,
         commit_reachable_from_given_tag=commit_reachable_from_given_tag,
     )
+
+    extract_changes_relevant_path
+
     return commit_feature
 
 
@@ -160,3 +163,15 @@ def extract_referred_to_by_pages_linked_from_advisories(
             advisory_record.references,
         )
     )
+
+
+def extract_relevant_path(commit: Commit, advisory_record: AdvisoryRecord):
+    relevant_paths = []
+
+    for changed_file in commit.changed_files:
+        for path in advisory_record.paths:
+            if path in changed_file:
+                relevant_path = [changed_file, path]
+                relevant_paths.append(relevant_path)
+
+    return relevant_paths
